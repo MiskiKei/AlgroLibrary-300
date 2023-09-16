@@ -33,7 +33,7 @@ public class Book_FileReader {
         return books;
     }
 
-    private static Book createBookFromFields(String[] fields) {
+    private static Book createBookFromFields(String[] fields) { //From the book class
         int bookId = Integer.parseInt(fields[0]);
         int goodreadsBookId = Integer.parseInt(fields[1]);
         int bestBookId = Integer.parseInt(fields[2]);
