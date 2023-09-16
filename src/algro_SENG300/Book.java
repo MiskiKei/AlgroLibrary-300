@@ -9,7 +9,7 @@ public class Book {
     private String isbn;
     private String isbn13;
     private String authors;
-    private int originalPublicationYear;
+    private double originalPublicationYear;
     private String originalTitle;
     private String title;
     private String languageCode;
@@ -28,7 +28,7 @@ public class Book {
     // Constructors
 
     public Book(int bookId, int goodreadsBookId, int bestBookId, int workId, int booksCount, String isbn,
-                String isbn13, String authors, int originalPublicationYear, String originalTitle, String title,
+                String isbn13, String authors, double originalPublicationYear2, String originalTitle, String title,
                 String languageCode, double averageRating, int ratingsCount, int workRatingsCount,
                 int workTextReviewsCount, int ratings1, int ratings2, int ratings3, int ratings4, int ratings5,
                 String imageUrl, String smallImageUrl) {
@@ -40,7 +40,7 @@ public class Book {
         this.isbn = isbn;
         this.isbn13 = isbn13;
         this.authors = authors;
-        this.originalPublicationYear = originalPublicationYear;
+        this.originalPublicationYear = originalPublicationYear2;
         this.originalTitle = originalTitle;
         this.title = title;
         this.languageCode = languageCode;
@@ -60,7 +60,7 @@ public class Book {
     //Setters and Getters
 
 
-    public int getBookId() {
+	public int getBookId() {
 		return bookId;
 	}
 
@@ -124,12 +124,12 @@ public class Book {
 		this.authors = authors;
 	}
 
-	public int getOriginalPublicationYear() {
-		return originalPublicationYear;
+	public double getOriginalPublicationYear() {
+	    return originalPublicationYear;
 	}
 
-	public void setOriginalPublicationYear(int originalPublicationYear) {
-		this.originalPublicationYear = originalPublicationYear;
+	public void setOriginalPublicationYear(double originalPublicationYear) {
+	    this.originalPublicationYear = originalPublicationYear;
 	}
 
 	public String getOriginalTitle() {
