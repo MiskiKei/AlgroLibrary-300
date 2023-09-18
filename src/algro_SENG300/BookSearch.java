@@ -9,7 +9,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
 	
 	//////// LINEAR SEARCH ///////////////
 	
-    private static Book linearSearchBookID(List<Book> books, int key) {
+    public static Book linearSearchBookID(List<Book> books, int key) {
         for (Book book : books) {
             if (book.getBookId() == key) {
                 return book; // Return the found book
@@ -19,7 +19,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
     }
     
     
-    private static Book linearSearchISBN(List<Book> books, String key) {
+    public static Book linearSearchISBN(List<Book> books, String key) {
         for (Book book : books) {
             if (book.getIsbn().equals(key)) {
                 return book; // Return the found book
@@ -28,7 +28,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
         return null; // Return null if the book is not found
     }
     
-    private static Book linearSearchOGTitle(List<Book> books, String key) {
+    public static Book linearSearchOGTitle(List<Book> books, String key) {
         for (Book book : books) {
             if (book.getOriginalTitle().equalsIgnoreCase(key)) {
                 return book; // Return the found book
@@ -37,7 +37,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
         return null; // Return null if the book is not found
     }
     
-    private static Book linearSearchAuthor(List<Book> books, String key) {
+    public static Book linearSearchAuthor(List<Book> books, String key) {
         for (Book book : books) {
             if (book.getAuthors().equalsIgnoreCase(key)) {
                 return book; // Return the found book
@@ -50,7 +50,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
     ///////////// BINARY SEARCH //////////////
     
     
-    private static Book binarySearchBookID(List<Book> books, int key) {
+    public static Book binarySearchBookID(List<Book> books, int key) {
         int left = 0;
         int right = books.size() - 1;
 
@@ -73,7 +73,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
         return null; 
     }
     
-    private static Book binarySearchISBN(List<Book> books, String key) {
+    public static Book binarySearchISBN(List<Book> books, String key) {
         int left = 0;
         int right = books.size() - 1;
 
@@ -96,7 +96,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
         return null; 
     }
     
-    private static Book binarySearchTitle(List<Book> books, String key) {
+    public static Book binarySearchTitle(List<Book> books, String key) {
         int left = 0;
         int right = books.size() - 1;
 
@@ -117,7 +117,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
         return null; 
     }
     
-    private static Book binarySearchAuthor(List<Book> books, String key) {
+    public static Book binarySearchAuthor(List<Book> books, String key) {
         int left = 0;
         int right = books.size() - 1;
 
@@ -142,6 +142,7 @@ public class BookSearch { //TODO: This class must test all methods in linear and
     
     public static void main(String[] args) {
         try {
+        	BookSearch mySearch = new BookSearch();
             List<Book> books = Book_FileReader.readCSV(); // Load books from CSV
 
             String searchKey = "john green"; // Searching for a book with ID 2

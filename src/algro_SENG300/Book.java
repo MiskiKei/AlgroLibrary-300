@@ -56,6 +56,7 @@ public class Book {
         this.imageUrl = imageUrl;
         this.smallImageUrl = smallImageUrl;
     }
+
     
     //Setters and Getters
 

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -32,17 +33,23 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JButton;
 
 
 public class LibraryCollection {
 
+	
+	public List<Book> matchingBooks = new ArrayList<>();
 	private JFrame frame;
     private JTable bookTable;
     private JTextField SearchTextField;
     private JScrollPane scrollPaneTable;
 
+   
+    
+    
 	/**
 	 * Launch the application.
 	 */
@@ -52,6 +59,7 @@ public class LibraryCollection {
 				try {
 					LibraryCollection window = new LibraryCollection();
 					window.frame.setVisible(true);
+					window.loadInitialBooks();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -142,32 +150,38 @@ public class LibraryCollection {
         
         
         bookTable.setEnabled(false);
-		
+    }
         
-		//PULLS FROM FILEREADER AND GETS 10 BOOKS
-	       List<Book> books = null;
-	        try {
-	            books = Book_FileReader.readCSV();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+	//PULLS FROM FILEREADER AND GETS 10 BOOKS
+        public void loadInitialBooks() {
+            DefaultTableModel tableModel = (DefaultTableModel) bookTable.getModel();
 
-	        if (books != null) {
-	            int limit = Math.min(10, books.size());
-	            for (int i = 0; i < limit; i++) {
-	                Book book = books.get(i);
-	                Object[] rowData = {
-	                    getImageIcon(book.getImageUrl()), // Display image
-	                    book.getBookId(),
-	                    book.getTitle(),
-	                    book.getAuthors(),
-	                    book.getIsbn(),
-	                    book.getOriginalPublicationYear(),
-	                    book.getAverageRating()
-	                };
-	                tableModel.addRow(rowData);
-	            }
-	        }
+            //PULLS FROM FILEREADER AND GETS 10 BOOKS
+            List<Book> books = null;
+            try {
+                books = Book_FileReader.readCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (books != null) {
+                int limit = Math.min(10, books.size());
+                for (int i = 0; i < limit; i++) {
+                    Book book = books.get(i);
+                    Object[] rowData = {
+                        getImageIcon(book.getImageUrl()), // Display image
+                        book.getBookId(),
+                        book.getTitle(),
+                        book.getAuthors(),
+                        book.getIsbn(),
+                        book.getOriginalPublicationYear(),
+                        book.getAverageRating()
+                    };
+                    tableModel.addRow(rowData);
+                }
+            }
+        
+
 	  
   ///////THIS CODE FIXES THE COLUMNS OF THE TABLE
 	        
@@ -246,7 +260,81 @@ public class LibraryCollection {
 	            return (value != null) ? new JLabel((ImageIcon) value) : null;
 	        }
 	    }
+	    
+	    
+	//////METHOD FOR SEARCHING BOOK MATCHES AUTHOR, ISBN, BOOK ID, TITLE 
+	    
+	    public List<Book> populateMatchingBooksBySearch(String key) throws IOException {
+	    	
+	        BookSearch mySearch = new BookSearch();
+	        List<Book> books = Book_FileReader.readCSV();
+	        
+	        List<Book> matchingBooks = new ArrayList<>();
 
+	        // Try searching by Book ID
+	        try {
+	            int bookIdToSearch = Integer.parseInt(key);
+	            Book foundBook = mySearch.linearSearchBookID(books, bookIdToSearch);
+
+	            if (foundBook != null) {
+	                matchingBooks.add(foundBook);
+	            }
+	        } catch (NumberFormatException e) {
+	            // If the key is not an INT it will continue to move onto the next criteria (ISBN, Title, Author) which are all strings 
+	        }
+
+	        // Try searching by ISBN
+	        if (matchingBooks.isEmpty()) {
+	            Book foundBook = mySearch.linearSearchISBN(books, key);
+	            if (foundBook != null) {
+	                matchingBooks.add(foundBook);
+	            }
+	        }
+	        
+	       // Try searching by OG Title
+	        if (matchingBooks.isEmpty()) {
+	            Book foundBook = mySearch.linearSearchOGTitle(books, key);
+	            if (foundBook != null) {
+	                matchingBooks.add(foundBook);
+	            }
+	        }
+	        
+	       // Try searching by Author
+	        if (matchingBooks.isEmpty()) {
+	            Book foundBook = mySearch.linearSearchAuthor(books, key);
+	            if (foundBook != null) {
+	                matchingBooks.add(foundBook);
+	            }
+	        }
+
+	        
+	        // Window that pops up if there are no matches found between the four methods 
+	        if (matchingBooks.isEmpty()) {
+	            JOptionPane.showMessageDialog(null, "Error: No matches found.");
+	        }
+
+	        return matchingBooks;
+	    }
+
+  
+	/////////METHOD FOR UPDATING TABLES AFTER SEARCH AND SORT 
+	    public void updateTableWithSearchResults(List<Book> matchingBooks) {
+	        DefaultTableModel tableModel = (DefaultTableModel) bookTable.getModel();
+	        tableModel.setRowCount(0); // Clear existing rows
+
+	        for (Book book : matchingBooks) {
+	            Object[] rowData = {
+	                getImageIcon(book.getImageUrl()), // Display image
+	                book.getBookId(),
+	                book.getTitle(),
+	                book.getAuthors(),
+	                book.getIsbn(),
+	                book.getOriginalPublicationYear(),
+	                book.getAverageRating()
+	            };
+	            tableModel.addRow(rowData);
+	        }
+	    }
 
 
 
@@ -260,14 +348,19 @@ public class LibraryCollection {
 
 	private void createEvents() {
 		
-		 //SEARCHING BASED ON ISBN, TITLE, AUTHOR, AND BOOKID
-		  SearchTextField.addActionListener(new ActionListener() {
-		        public void actionPerformed(ActionEvent e) {
-		        	String searchTerm = SearchTextField.getText();
-		        	
-		        	
+		SearchTextField.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            String key = SearchTextField.getText();
+		            
+		            List<Book> matchingBooks = populateMatchingBooksBySearch(key);
+		            updateTableWithSearchResults(matchingBooks);
+		            
+		        } catch (IOException ex) {
+		            ex.printStackTrace();
 		        }
-		    });
+		    }
+		});
 			 
 		
 	 //Gray to Black text for search bar
