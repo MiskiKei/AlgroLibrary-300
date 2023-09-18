@@ -45,6 +45,7 @@ public class LibraryCollection {
 	private JFrame frame;
     private JTable bookTable;
     private JTextField SearchTextField;
+    private JButton resetButton;
     private JScrollPane scrollPaneTable;
 
    
@@ -127,6 +128,11 @@ public class LibraryCollection {
 	    SearchTextField.setCaretColor(Color.BLACK);
 	    SearchTextField.setForeground(Color.LIGHT_GRAY);
 	    
+	    resetButton = new JButton("Reset");
+        resetButton.setFont(new Font("Songti SC", Font.PLAIN, 17));
+        resetButton.setBounds(1157, 677, 117, 30);
+        contentPane.add(resetButton);
+	    
         
         scrollPaneTable = new JScrollPane();
         scrollPaneTable.setBounds(21, 58, 1243, 611);
@@ -150,6 +156,7 @@ public class LibraryCollection {
         
         
         bookTable.setEnabled(false);
+        
     }
         
 	//PULLS FROM FILEREADER AND GETS 10 BOOKS
@@ -361,6 +368,15 @@ public class LibraryCollection {
 		        }
 		    }
 		});
+		
+	    resetButton.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		DefaultTableModel tableModel = (DefaultTableModel) bookTable.getModel();
+	 	        tableModel.setRowCount(0); // Clear existing rows on tables
+	 	        
+	    		loadInitialBooks();
+	    	}
+	    });
 			 
 		
 	 //Gray to Black text for search bar
