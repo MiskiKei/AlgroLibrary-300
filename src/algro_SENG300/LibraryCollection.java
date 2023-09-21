@@ -281,7 +281,7 @@ public class LibraryCollection {
 	        // Try searching by Book ID
 	        try {
 	            int bookIdToSearch = Integer.parseInt(key);
-	            Book foundBook = mySearch.linearSearchBookID(books, bookIdToSearch);
+	            Book foundBook = mySearch.binarySearchBookID(books, bookIdToSearch);
 
 	            if (foundBook != null) {
 	                matchingBooks.add(foundBook);

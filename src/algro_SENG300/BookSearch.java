@@ -2,6 +2,7 @@ package algro_SENG300;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BookSearch { //TODO: This class must test all methods in linear and binary search 
@@ -137,24 +138,84 @@ public class BookSearch { //TODO: This class must test all methods in linear and
 
         return null; 
     }
+    
+    public static long testLinearSearchBookID(List<Book> books, List<Integer> keys) {
+        long startTime = System.currentTimeMillis();
+        for (int key : keys) {
+            Book result = linearSearchBookID(books, key);
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
+    }
+
+    public static long testLinearSearchISBN(List<Book> books, List<String> keys) {
+        long startTime = System.currentTimeMillis();
+        for (String key : keys) {
+            Book result = linearSearchISBN(books, key);
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
+    }
+
+    public static long testBinarySearchBookID(List<Book> books, List<Integer> keys) {
+        long startTime = System.currentTimeMillis();
+        for (int key : keys) {
+            Book result = binarySearchBookID(books, key);
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
+    }
+
+    public static long testBinarySearchISBN(List<Book> books, List<String> keys) {
+        long startTime = System.currentTimeMillis();
+        for (String key : keys) {
+            Book result = binarySearchISBN(books, key);
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
+    }
+
+
 
     
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        List<Book> books = null;
         try {
-        	BookSearch mySearch = new BookSearch();
-            List<Book> books = Book_FileReader.readCSV(); // Load books from CSV
-
-            String searchKey = "john green"; // Searching for a book with ID 2
-            Book foundBook =  binarySearchAuthor(books, searchKey); //takes in the list of books and the bookid 
-
-            if (foundBook != null) {
-                System.out.println("Book found: " + foundBook.getBookId() + ", " + foundBook.getTitle());
-            } else {
-                System.out.println("Book not found.");
-            }
+            books = Book_FileReader.readCSV();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (books != null) {
+            int limit = Math.min(1000, books.size());
+            List<Integer> specificBookIds = new ArrayList<>();
+            specificBookIds.add(950);
+            List<String> specificIsbns = new ArrayList<>();
+            specificIsbns.add("451188462");
+
+            for (int i = 0; i < limit; i++) {
+                Book book = books.get(i);
+                specificBookIds.add(book.getBookId());
+                specificIsbns.add(book.getIsbn());
+            }
+
+            // Test linear search for Book IDs
+            long linearSearchTimeBookId = BookSearch.testLinearSearchBookID(books, specificBookIds);
+            System.out.println("Linear Search Time for Book IDs: " + linearSearchTimeBookId + " milliseconds");
+
+            // Test linear search for ISBNs
+            long linearSearchTimeIsbn = BookSearch.testLinearSearchISBN(books, specificIsbns);
+            System.out.println("Linear Search Time for ISBNs: " + linearSearchTimeIsbn + " milliseconds");
+
+            // Test binary search for Book IDs
+            long binarySearchTimeBookId = BookSearch.testBinarySearchBookID(books, specificBookIds);
+            System.out.println("Binary Search Time for Book IDs: " + binarySearchTimeBookId + " milliseconds");
+
+            // Test binary search for ISBNs
+            long binarySearchTimeIsbn = BookSearch.testBinarySearchISBN(books, specificIsbns);
+            System.out.println("Binary Search Time for ISBNs: " + binarySearchTimeIsbn + " milliseconds");
+        }
     }
 }
+   
