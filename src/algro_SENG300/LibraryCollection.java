@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,6 +37,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 
 
 public class LibraryCollection {
@@ -47,7 +49,11 @@ public class LibraryCollection {
     private JTextField SearchTextField;
     private JButton resetButton;
     private JScrollPane scrollPaneTable;
-
+    private JRadioButton rdbtnAuthorAscending;
+    private	JRadioButton rdbtnAuthorDescending;
+    private JRadioButton rdbtnPubYearAscend;
+    private	JRadioButton rdbtnPubYearDescend;
+	private JButton btnSubmitSort;
    
     
     
@@ -157,7 +163,102 @@ public class LibraryCollection {
         
         bookTable.setEnabled(false);
         
+    
+      //RADIOBUTTONS TO SORT BOOKS BY AUTHOR AND PUBLICATION YEAR
+        
+        
+        JRadioButton rdbtnAuthorAscending = new JRadioButton("Sort by Author (Ascending)");
+        rdbtnAuthorAscending.setBounds(31, 684, 222, 23);
+        contentPane.add(rdbtnAuthorAscending);
+        
+        JRadioButton rdbtnAuthorDescending = new JRadioButton("Sort by Author (Descending)");
+        rdbtnAuthorDescending.setBounds(30, 719, 209, 23);
+        contentPane.add(rdbtnAuthorDescending);
+        
+        JRadioButton rdbtnPubYearAscend = new JRadioButton("Sort by Publication Year (Ascending)");
+        rdbtnPubYearAscend.setBounds(275, 684, 259, 23);
+        contentPane.add(rdbtnPubYearAscend);
+        
+        JRadioButton rdbtnPubYearDescend = new JRadioButton("Sort by Publication Year (Descending)");
+        rdbtnPubYearDescend.setBounds(275, 719, 267, 23);
+        contentPane.add(rdbtnPubYearDescend);
+        
+        ButtonGroup SortGroup = new ButtonGroup();
+        SortGroup.add(rdbtnAuthorAscending);
+        SortGroup.add(rdbtnAuthorDescending);
+        SortGroup.add(rdbtnPubYearAscend);
+        SortGroup.add(rdbtnPubYearDescend);
+       
+        
+        btnSubmitSort = new JButton("Submit");
+        btnSubmitSort.setBounds(191, 761, 117, 29);
+        contentPane.add(btnSubmitSort);
+
+    
+        btnSubmitSort.addActionListener(new ActionListener() {
+        		
+        	public void actionPerformed(ActionEvent e) {
+        		List<Book> sortedBooks = null;
+
+        		if (rdbtnAuthorAscending.isSelected()) {
+        			try {
+        				sortedBooks = sortByAuthorAscending();
+        			} catch (IOException e1) {
+        				e1.printStackTrace();
+        			}
+        		} else if (rdbtnAuthorDescending.isSelected()) {
+        			try {
+        				sortedBooks = sortByAuthorDescending();
+        			} catch (IOException e1) {
+        				e1.printStackTrace();
+        			}
+        		} else if (rdbtnPubYearAscend.isSelected()) {
+        			try {
+        				sortedBooks = sortByPublicationYearAscending();
+        			} catch (IOException e1) {
+        				e1.printStackTrace();
+        			}
+        		} else if (rdbtnPubYearDescend.isSelected()) {
+        			try {
+        				sortedBooks = sortByPublicationYearDescending();
+        			} catch (IOException e1) {
+        				e1.printStackTrace();
+        			}
+        		}
+
+        		if (sortedBooks != null) {
+        			updateTableWithSortedBooks(sortedBooks);
+        		}
+        	}
+        });
     }
+            public void updateTableWithSortedBooks(List<Book> sortedBooks) {
+    	        DefaultTableModel tableModel = (DefaultTableModel) bookTable.getModel();
+    	        tableModel.setRowCount(0); // Clear existing rows
+
+    	        for (Book book : sortedBooks) {
+    	            Object[] rowData = {
+    	                getImageIcon(book.getImageUrl()), // Display image
+    	                book.getBookId(),
+    	                book.getTitle(),
+    	                book.getAuthors(),
+    	                book.getIsbn(),
+    	                book.getOriginalPublicationYear(),
+    	                book.getAverageRating()
+    	            };
+    	            tableModel.addRow(rowData);
+    	        }
+    	    
+          
+          
+          }
+    
+    	    
+        	      
+        
+
+        
+    
         
 	//PULLS FROM FILEREADER AND GETS 10 BOOKS
         public void loadInitialBooks() {
@@ -342,8 +443,69 @@ public class LibraryCollection {
 	            tableModel.addRow(rowData);
 	        }
 	    }
+	    
+	    //////////METHOD FOR UPDATING SORTING TABLES
+//	    public void updateTableWithSortedBooks(List<Book> sortedBooks) {
+//	        DefaultTableModel tableModel = (DefaultTableModel) bookTable.getModel();
+//	        tableModel.setRowCount(0); // Clear existing rows
+//
+//	        for (Book book : sortedBooks) {
+//	            Object[] rowData = {
+//	                getImageIcon(book.getImageUrl()), // Display image
+//	                book.getBookId(),
+//	                book.getTitle(),
+//	                book.getAuthors(),
+//	                book.getIsbn(),
+//	                book.getOriginalPublicationYear(),
+//	                book.getAverageRating()
+//	            };
+//	            tableModel.addRow(rowData);
+//	        }
+//	    }
 
+	    //public List<Book> populateBooksBySort() throws IOException {
+	    	
+//	        BookSorter mySort = new BookSorter();
+	       //List<Book> books = Book_FileReader.readCSV();
+//	       
+//	        //mySort.sortByAuthorAscending(books);
+//
+//	    //}
+	    public List<Book> sortByAuthorAscending() throws IOException {
+	    	 BookSorter mySort = new BookSorter();
+	    	 List<Book> books2 = Book_FileReader.readCSV();
+	    	 List<Book>  sorting = new ArrayList();
+	    	sorting = mySort.sortByAuthorAscending(books2);
+	    	System.out.print(sorting);
+	        return sorting;
+	       
+    }
+    public List<Book> sortByAuthorDescending() throws IOException {
+    	 BookSorter mySort = new BookSorter();
+    	 List<Book> books2 = Book_FileReader.readCSV();
+    	 List<Book>  sorting = new ArrayList();
+    	sorting = mySort.sortByAuthorDescending(books2);
+    	System.out.print(sorting);
+        return sorting;
+    }
+//
+    public List<Book> sortByPublicationYearAscending() throws IOException {
+    		BookSorter mySort = new BookSorter();
+    		List<Book> books2 = Book_FileReader.readCSV();
+    		List<Book> sorting = new ArrayList();
+    		sorting = mySort.sortByPublicationYearAscending(books2);
+    		return sorting;
+    }
 
+    public List<Book> sortByPublicationYearDescending() throws IOException {
+		BookSorter mySort = new BookSorter();
+		List<Book> books2 = Book_FileReader.readCSV();
+		List<Book> sorting = new ArrayList();
+		sorting = mySort.sortByPublicationYearDescending(books2);
+		return sorting;
+}
+
+	    
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///// This method contains all of the code for creating events
@@ -354,7 +516,12 @@ public class LibraryCollection {
 	 */
 
 	private void createEvents() {
+	
 		
+	//SORTING BOOKS
+		 
+	    
+		//MATCHING BOOKS BY SEARCH
 		SearchTextField.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        try {
@@ -444,5 +611,5 @@ public class LibraryCollection {
 	            // not needed for plain text fields
 	        }
 	    });
-	}
-	}
+	} }
+	
