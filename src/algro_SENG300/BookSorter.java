@@ -100,35 +100,32 @@ public class BookSorter {
 
         return books;
     }
-
-
-
-public static void main(String[] args) {
-  try {
-       List<Book> books2 = Book_FileReader.readCSV();
-
-//        // Sort the books by author in ascending order
-       BookSorter.sortByAuthorAscending(books2);
-
-       // Display the sorted books
-        System.out.println("Books sorted by author in ascending order:");
-       for (Book book : books2) {
-            System.out.println(book.getAuthors() + ": " + book.getOriginalTitle());
-       }
-
-       // Sort the books by author in descending order
-       BookSorter.sortByAuthorDescending(books2);
-
-       // Display the sorted books
-        System.out.println("\nBooks sorted by author in descending order:");        
-        for (Book book : books2) {
-            System.out.println(book.getAuthors() + ": " + book.getOriginalTitle());
-       }
-   } catch (IOException e) {
-        e.printStackTrace();
-    }}
-	
 }
+
+
+
+/*
+ * public static void main(String[] args) { try { List<Book> books2 =
+ * Book_FileReader.readCSV();
+ * 
+ * // // Sort the books by author in ascending order
+ * BookSorter.sortByAuthorAscending(books2);
+ * 
+ * // Display the sorted books
+ * System.out.println("Books sorted by author in ascending order:"); for (Book
+ * book : books2) { System.out.println(book.getAuthors() + ": " +
+ * book.getOriginalTitle()); }
+ * 
+ * // Sort the books by author in descending order
+ * BookSorter.sortByAuthorDescending(books2);
+ * 
+ * // Display the sorted books
+ * System.out.println("\nBooks sorted by author in descending order:"); for
+ * (Book book : books2) { System.out.println(book.getAuthors() + ": " +
+ * book.getOriginalTitle()); } } catch (IOException e) { e.printStackTrace(); }}
+ * 
+ * }
+ */
 
 
 

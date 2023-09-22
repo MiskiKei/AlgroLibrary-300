@@ -472,38 +472,40 @@ public class LibraryCollection {
 //
 //	    //}
 	    public List<Book> sortByAuthorAscending() throws IOException {
-	    	 BookSorter mySort = new BookSorter();
-	    	 List<Book> books2 = Book_FileReader.readCSV();
-	    	 List<Book>  sorting = new ArrayList();
-	    	sorting = mySort.sortByAuthorAscending(books2);
-	    	System.out.print(sorting);
-	        return sorting;
-	       
-    }
-    public List<Book> sortByAuthorDescending() throws IOException {
-    	 BookSorter mySort = new BookSorter();
-    	 List<Book> books2 = Book_FileReader.readCSV();
-    	 List<Book>  sorting = new ArrayList();
-    	sorting = mySort.sortByAuthorDescending(books2);
-    	System.out.print(sorting);
-        return sorting;
-    }
-//
-    public List<Book> sortByPublicationYearAscending() throws IOException {
-    		BookSorter mySort = new BookSorter();
-    		List<Book> books2 = Book_FileReader.readCSV();
-    		List<Book> sorting = new ArrayList();
-    		sorting = mySort.sortByPublicationYearAscending(books2);
-    		return sorting;
-    }
+	        BookSorter mySort = new BookSorter();
+	        List<Book> books2 = Book_FileReader.readCSV();
+	        List<Book> limitedBooks = books2.subList(0, Math.min(200, books2.size()));
 
-    public List<Book> sortByPublicationYearDescending() throws IOException {
-		BookSorter mySort = new BookSorter();
-		List<Book> books2 = Book_FileReader.readCSV();
-		List<Book> sorting = new ArrayList();
-		sorting = mySort.sortByPublicationYearDescending(books2);
-		return sorting;
-}
+	        List<Book> sorting = mySort.sortByAuthorAscending(limitedBooks);
+	        return sorting;
+	    }
+	    public List<Book> sortByAuthorDescending() throws IOException {
+	        BookSorter mySort = new BookSorter();
+	        List<Book> books2 = Book_FileReader.readCSV();
+	        List<Book> limitedBooks = books2.subList(0, Math.min(200, books2.size()));
+
+	        List<Book> sorting = mySort.sortByAuthorDescending(limitedBooks);
+
+	        return sorting;
+	    }
+
+	    public List<Book> sortByPublicationYearAscending() throws IOException {
+	        BookSorter mySort = new BookSorter();
+	        List<Book> books2 = Book_FileReader.readCSV();
+	        List<Book> limitedBooks = books2.subList(0, Math.min(200, books2.size()));
+
+	        List<Book> sorting = mySort.sortByPublicationYearAscending(limitedBooks);
+	        return sorting;
+	    }
+
+	    public List<Book> sortByPublicationYearDescending() throws IOException {
+	        BookSorter mySort = new BookSorter();
+	        List<Book> books2 = Book_FileReader.readCSV();
+	        List<Book> limitedBooks = books2.subList(0, Math.min(200, books2.size()));
+
+	        List<Book> sorting = mySort.sortByPublicationYearDescending(limitedBooks);
+	        return sorting;
+	    }
 
 	    
 

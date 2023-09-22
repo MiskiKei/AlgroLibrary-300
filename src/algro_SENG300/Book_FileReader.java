@@ -11,7 +11,7 @@ public class Book_FileReader {
 
     public static List<Book> readCSV() throws IOException {
 
-        List<Book> books = new ArrayList<>();
+        List<Book> books = new ArrayList<>(); //return either type if else statement 
 
         String csvPattern = ",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))";
 
